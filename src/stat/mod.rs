@@ -56,11 +56,28 @@ pub const SRBM2_INDEX: &[(&str, usize)] = &[
 */
 
 pub const CP_STAT_INDEX: &[(&str, usize)] = &[
+    ("ROQ_RING_BUSY", 9),
+    ("ROQ_INDIRECT1_BUSY", 10),
+    ("ROQ_INDIRECT2_BUSY", 11),
+    ("ROQ_STATE_BUSY", 12),
+    ("DC_BUSY", 13),
+    ("UTCL2IU_BUSY", 14),
     ("Prefetch Parser", 15),
+    ("MEQ_BUSY", 16),
     ("Micro Engine", 17),
-    // ("Surface Sync", 21),
+    ("QUERY_BUSY", 18),
+    ("SEMAPHORE_BUSY", 19),
+    ("INTERRUPT_BUSY", 20),
+    ("Surface Sync", 21),
     ("DMA", 22),
+    ("RCIU_BUSY", 23),
     ("Scratch Memory", 24),
+    ("CE_BUSY", 26),
+    ("TCIU_BUSY", 27),
+    ("ROQ_CE_RING_BUSY", 28),
+    ("ROQ_CE_INDIRECT1_BUSY", 29),
+    ("ROQ_CE_INDIRECT2_BUSY", 30),
+    ("CP_BUSY", 31),
 ];
 
 mod pc_type;
