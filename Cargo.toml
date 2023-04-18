@@ -10,6 +10,10 @@ Tool to displays AMDGPU usage.
 The tool displays information gathered from performance counters (GRBM, GRBM2), sensors, fdinfo, gpu_metrics and AMDGPU driver.
 """
 
+[features]
+default = ["fdinfo"]
+fdinfo = []
+
 [[bin]]
 name = "amdgpu_top"
 path = "src/main.rs"

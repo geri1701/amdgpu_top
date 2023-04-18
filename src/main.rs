@@ -126,6 +126,11 @@ fn main() {
 
     let mut toggle_opt = ToggleOptions::default();
 
+    #[cfg(not(feature = "fdinfo"))]
+    {
+        toggle_opt.fdinfo = false;
+    }
+
     {   // check register offset
         toggle_opt.grbm = grbm.pc_type.check_reg_offset(&amdgpu_dev);
         toggle_opt.grbm2 = grbm2.pc_type.check_reg_offset(&amdgpu_dev);
@@ -139,7 +144,7 @@ fn main() {
         vram_usage.set_value();
 
         // fill
-        {
+        if toggle_opt.fdinfo {
             stat::update_index(&mut proc_index, &device_paths, self_pid);
             fdinfo.print(&proc_index, &toggle_opt.fdinfo_sort, false).unwrap();
             fdinfo.text.set();
@@ -176,7 +181,7 @@ fn main() {
             layout.add_child(vram_usage.view());
             siv.add_global_callback('v', stat::VramUsageView::cb);
         }
-        {
+        if toggle_opt.fdinfo {
             layout.add_child(fdinfo.text.panel("fdinfo"));
             siv.add_global_callback('f', stat::FdInfoView::cb);
             siv.add_global_callback('R', stat::FdInfoView::cb_reverse_sort);
@@ -207,9 +212,6 @@ fn main() {
         );
     }
 
-    let mut flags = toggle_opt.clone();
-    let toggle_opt = Arc::new(Mutex::new(toggle_opt));
-    siv.set_user_data(toggle_opt.clone());
     siv.add_global_callback('q', cursive::Cursive::quit);
     siv.add_global_callback('h', Sampling::cb);
 
@@ -233,7 +235,7 @@ fn main() {
         });
     }
 
-    {
+    if toggle_opt.fdinfo {
         let index = share_proc_index.clone();
         let mut buf_index: Vec<stat::ProcInfo> = Vec::new();
 
@@ -250,6 +252,10 @@ fn main() {
             }
         });
     }
+
+    let mut flags = toggle_opt.clone();
+    let toggle_opt = Arc::new(Mutex::new(toggle_opt));
+    siv.set_user_data(toggle_opt.clone());
 
     std::thread::spawn(move || {
         let index = share_proc_index.clone();
